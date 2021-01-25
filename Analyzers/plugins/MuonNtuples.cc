@@ -329,7 +329,6 @@ void MuonNtuples::analyze (const edm::Event &event, const edm::EventSetup &event
 
   theService->update(eventSetup);
 
-  std::cout <<  "MuonNtuples.cc says hi!" << std::endl;
   beginEvent();
 
   // Fill general info
