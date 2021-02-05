@@ -164,7 +164,7 @@ public:
   Float_t dxy;
   Float_t dz;
 
-
+  Float_t chi2;
 
   Int_t NumOISeeds;
   Int_t NumOIHitlessSeeds;

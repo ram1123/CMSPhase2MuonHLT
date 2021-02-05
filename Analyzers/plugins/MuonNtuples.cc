@@ -916,6 +916,11 @@ void MuonNtuples::fillHltMuons(const edm::Handle<reco::RecoChargedCandidateColle
     reco::TrackRef trkmu = candref->track();
     theL3Mu.trkpt   = trkmu -> pt();
     if (type == HLTCollectionType::iL2muons){
+        if (trkmu -> ndof() != 0){ 
+            theL3Mu.chi2 = trkmu -> chi2() / trkmu -> ndof();
+        } else {
+            theL3Mu.chi2 = -1;
+        }
         theL3Mu.validHits = trkmu -> found();
         theL3Mu.lostHits = trkmu -> lost();
         
