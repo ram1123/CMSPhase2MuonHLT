@@ -21,8 +21,10 @@ scram b -j 10
 ```
 
 ### Configs
-Located in HLTrigger/PhaseII/python/Muon/example_cfgs
-`HLT_test.py` - default
-`HLT_test_VectorHits.py` - hit-based seeds in OI will be created using VectorHits
+Located under `HLTrigger/PhaseII/python/Muon/example_cfgs/`
+```shell
+HLT_test.py # default
+HLT_test_VectorHits.py # hit-based seeds in OI will be created using VectorHits
+```
 
 
