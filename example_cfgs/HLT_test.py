@@ -125,7 +125,7 @@ process.schedule = cms.Schedule(
 process.load( "DQMServices.Core.DQMStore_cfi" )
 process.DQMStore.enableMultiThread = True
 
-process.GlobalTag.globaltag = "111X_mcRun4_realistic_T15_v3"
+process.GlobalTag.globaltag = "113X_mcRun4_realistic_v1"
 
 process.source.fileNames = cms.untracked.vstring(
     "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/DYToLL_M-50_TuneCP5_14TeV-pythia8/FEVT/PU200_pilot_111X_mcRun4_realistic_T15_v1-v1/270000/FC1C5501-17FF-AD4E-B0C2-78B114D94AD6.root",
@@ -141,15 +141,6 @@ process.options = cms.untracked.PSet(
     numberOfStreams = cms.untracked.uint32( 0 ),
     sizeOfStackForThreadsInKB = cms.untracked.uint32( 10*1024 )
 )
-
-if 'MessageLogger' in process.__dict__:
-    process.MessageLogger.categories.append('TriggerSummaryProducerAOD')
-    process.MessageLogger.categories.append('L1GtTrigReport')
-    process.MessageLogger.categories.append('L1TGlobalSummary')
-    process.MessageLogger.categories.append('HLTrigReport')
-    process.MessageLogger.categories.append('FastReport')
-    process.MessageLogger.cerr.FwkReport.reportEvery = 1  # 1000
-# -- #
 
 
 from SLHCUpgradeSimulations.Configuration.aging import customise_aging_1000
