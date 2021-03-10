@@ -228,6 +228,29 @@ public:
 };
 
 
+class L1TkMuonCand {
+public:
+
+  Float_t pt;           
+  Float_t eta;          
+  Float_t phi;          
+  Int_t   charge;      
+  Int_t   quality;      
+  Float_t pt_muref;           
+  Float_t eta_muref;          
+  Float_t phi_muref;          
+  Int_t   charge_muref;      
+  Int_t   quality_muref;      
+  Int_t   NMatchedTracks_muref;
+  Int_t   MuonRegion;
+
+  L1TkMuonCand(){};
+  virtual ~L1TkMuonCand(){};
+
+  ClassDef(L1TkMuonCand,1)
+
+};
+
 
 class HLTObjCand {
 public:
@@ -301,6 +324,7 @@ public:
   std::vector <HLTMuonCand>     hltIOmuons;
   std::vector <HLTMuonCand>     L2muons;      
   std::vector <L1MuonCand>      L1muons;      
+  std::vector <L1TkMuonCand>      L1Tkmuons;      
   std::vector <HLTMuonCand>     L2muonsTSG;
 
 //*******************INCLUDED*******************//

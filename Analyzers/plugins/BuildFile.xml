@@ -15,7 +15,7 @@
 <use name="RecoMuon/TrackingTools"/>
 <use name="MagneticField/Engine"/>
 <use name="MagneticField/Records"/>
-
+<use name="L1Trigger/L1TMuon"/>
 
 <library name="HLTriggerAnalyzersPlugin" file="*.cc">
    <use name="HLTrigger/Analyzers"/>

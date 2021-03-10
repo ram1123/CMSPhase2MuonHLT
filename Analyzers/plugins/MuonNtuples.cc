@@ -61,6 +61,9 @@
 #include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
 #include "Geometry/Records/interface/GlobalTrackingGeometryRecord.h"
 #include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
+#include "DataFormats/L1TCorrelator/interface/TkMuon.h"
+#include "DataFormats/L1TCorrelator/interface/TkMuonFwd.h"
+#include "L1Trigger/L1TMuon/interface/MicroGMTConfiguration.h"
 
 class MuonServiceProxy;
 
@@ -143,6 +146,9 @@ class MuonNtuples : public edm::EDAnalyzer {
   void fillL1Muons(const edm::Handle<l1t::MuonBxCollection> &,
                     const edm::Event   &
                    );
+  void fillL1TkMuons(const edm::Handle<l1t::TkMuonCollection> &,
+                    const edm::Event   &
+                   );
 
   void MonteCarloStudies(const edm::Event&);
   
@@ -190,6 +196,8 @@ class MuonNtuples : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::RecoChargedCandidateCollection> l2candToken_; 
   edm::InputTag l1candTag_;
   edm::EDGetTokenT<l1t::MuonBxCollection> l1candToken_; 
+  edm::InputTag l1tkcandTag_;
+  edm::EDGetTokenT<l1t::TkMuonCollection> l1tkcandToken_; 
   edm::InputTag tkMucandTag_;
   edm::EDGetTokenT<reco::RecoChargedCandidateCollection> tkMucandToken_; 
   edm::InputTag l3OIcandTag_;
@@ -277,8 +285,10 @@ MuonNtuples::MuonNtuples(const edm::ParameterSet& cfg):
     l2candToken_            (consumes<reco::RecoChargedCandidateCollection>(l2candTag_)),
   l1candTag_              (cfg.getUntrackedParameter<edm::InputTag>("L1Candidates")),
     l1candToken_            (consumes<l1t::MuonBxCollection>(l1candTag_)),
+  l1tkcandTag_              (cfg.getUntrackedParameter<edm::InputTag>("L1TkCandidates")),
+  l1tkcandToken_            (consumes<l1t::TkMuonCollection>(l1tkcandTag_)),
   tkMucandTag_            (cfg.getUntrackedParameter<edm::InputTag>("TkMuCandidates")),
-    tkMucandToken_          (consumes<reco::RecoChargedCandidateCollection>(tkMucandTag_)),
+  tkMucandToken_          (consumes<reco::RecoChargedCandidateCollection>(tkMucandTag_)),
   l3OIcandTag_            (cfg.getUntrackedParameter<edm::InputTag>("L3OIMuCandidates")),
     l3OIcandToken_          (consumes<reco::RecoChargedCandidateCollection>(l3OIcandTag_)),
   l3IOcandTag_          (cfg.getUntrackedParameter<edm::InputTag>("L3IOMuCandidates")),
@@ -471,6 +481,11 @@ void MuonNtuples::analyze (const edm::Event &event, const edm::EventSetup &event
   edm::Handle<l1t::MuonBxCollection> l1cands;
   if (event.getByToken(l1candToken_, l1cands))
     fillL1Muons(l1cands, event);
+
+  edm::Handle<l1t::TkMuonCollection> l1tkcands;
+  if (event.getByToken(l1tkcandToken_, l1tkcands))
+    fillL1TkMuons(l1tkcands, event);
+  
 //  else
 //    edm::LogWarning("") << "Online L1 muon collection not found !!!";
   
@@ -1043,6 +1058,56 @@ void MuonNtuples::fillL1Muons(const edm::Handle<l1t::MuonBxCollection> & l1cands
       event_.L1muons.push_back(theL1Mu);
     }
   }
+}
+
+
+// ---------------------------------------------------------------------
+void MuonNtuples::fillL1TkMuons(const edm::Handle<l1t::TkMuonCollection> & l1tkcands ,
+                              const edm::Event                         & event    
+				)
+{
+  
+  for (auto ittkmu = l1tkcands->begin(); ittkmu != l1tkcands->end(); ittkmu++) {
+    //l1t::MuonRef muon(l1cands, distance(l1cands->begin(l1cands->getFirstBX()),it) );
+    auto it = ittkmu->trkPtr();
+    //int valid_charge = 1;
+    //int charge =1;
+    //if (it->rInv()<0) charge= -1;
+    // int charge = it->charge();
+    // Set charge=0 for the time being if the valid charge bit is zero
+    //if (!valid_charge)
+    //charge = 0;
+
+    // propagate to GMT
+    auto p3 = it->momentum();
+    L1TkMuonCand theL1TkMu;
+    
+    theL1TkMu.pt       = p3.perp();
+    theL1TkMu.eta      = p3.eta();
+    theL1TkMu.phi      = p3.phi();
+    theL1TkMu.charge   = it->rInv()>0? 1.: -1.;
+    theL1TkMu.quality  = 0;
+    if (ittkmu->muonDetector() != 3) {
+      theL1TkMu.pt_muref       = ittkmu->muRef()->hwPt() * 0.5;
+      theL1TkMu.eta_muref      = ittkmu->muRef()->hwEta() * 0.010875;
+      theL1TkMu.phi_muref      = l1t::MicroGMTConfiguration::calcGlobalPhi(ittkmu->muRef()->hwPhi(), ittkmu->muRef()->trackFinderType(), ittkmu->muRef()->processor()) * 2 * M_PI / 576;
+      theL1TkMu.charge_muref   = std::pow(-1, ittkmu->muRef()->hwSign());
+      theL1TkMu.quality_muref  = ittkmu->quality();      
+      theL1TkMu.NMatchedTracks_muref = ittkmu->nTracksMatched();
+    }
+    else {
+      theL1TkMu.pt_muref       = ittkmu->emtfTrk()->Pt();
+      theL1TkMu.eta_muref      = ittkmu->emtfTrk()->Eta();
+      theL1TkMu.phi_muref      = angle_units::operators::convertDegToRad(ittkmu->emtfTrk()->Phi_glob());
+      theL1TkMu.charge_muref   = ittkmu->emtfTrk()->Charge();
+      theL1TkMu.quality_muref  = ittkmu->quality();      
+      theL1TkMu.NMatchedTracks_muref = ittkmu->nTracksMatched();
+    }
+    theL1TkMu.MuonRegion = ittkmu->muonDetector();
+    
+    event_.L1Tkmuons.push_back(theL1TkMu);
+  }
+  
 }
 
 
