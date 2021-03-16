@@ -71,7 +71,7 @@ process.HLTriggerFinalPath = cms.Path(
 # -- #
 
 # -- HLT paths -- #
-from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_ForWOL2_cfi import loadPhase2MuonHLTPaths
+from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_L1TkMu_cfi import loadPhase2MuonHLTPaths
 process = loadPhase2MuonHLTPaths(process)
 
 process.dump = cms.EDAnalyzer('EventContentAnalyzer')
