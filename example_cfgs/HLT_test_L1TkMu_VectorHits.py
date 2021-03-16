@@ -124,7 +124,7 @@ process.muonNtuples = cms.EDAnalyzer("MuonNtuples",
                                  )
 
 process.TFileService = cms.Service("TFileService",
-                               fileName = cms.string("muonNtuple_phase2_MC_DYToLL_0PU_WOL2_FinalSetup.root"),
+                               fileName = cms.string("muonNtuple_phase2_MC.root"),
                                closeFileFast = cms.untracked.bool(False)
 )
 process.HLTValidation = cms.EndPath(
