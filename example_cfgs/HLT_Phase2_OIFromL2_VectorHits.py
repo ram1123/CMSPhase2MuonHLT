@@ -62,7 +62,7 @@ process.HLTriggerFinalPath = cms.Path(
 process.load('RecoLocalTracker.SiPhase2VectorHitBuilder.siPhase2VectorHits_cfi')
 
 # -- HLT paths -- #
-from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPathsVectorHits_cfi import loadPhase2MuonHLTPaths
+from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_OIFromL2_VectorHits_cfi import loadPhase2MuonHLTPaths
 process = loadPhase2MuonHLTPaths(process)
 
 from RecoMuon.TrackingTools.MuonServiceProxy_cff import *

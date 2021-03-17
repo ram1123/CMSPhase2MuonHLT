@@ -58,7 +58,7 @@ process.HLTriggerFinalPath = cms.Path(
 # -- #
 
 # -- HLT paths -- #
-from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_cfi import loadPhase2MuonHLTPaths
+from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_OIFromL2_cfi import loadPhase2MuonHLTPaths
 process = loadPhase2MuonHLTPaths(process)
 
 from RecoMuon.TrackingTools.MuonServiceProxy_cff import *

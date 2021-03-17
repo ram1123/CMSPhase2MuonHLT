@@ -33,10 +33,10 @@ L1TkMuon scalings (ScalingsV11p1.txt):
     )
 
     # -- L3 Reconstruction and Isolation
-    from HLTrigger.PhaseII.Muon.Customizers.customizerForPhase2MuonHLTVectorHits_L1TkMu import customizePhase2MuonHLTReconstruction
+    from HLTrigger.PhaseII.Muon.Customizers.customizerForPhase2MuonHLT_OIFromL1TkMu import customizePhase2MuonHLTReconstruction
     process = customizePhase2MuonHLTReconstruction(process)
 
-    from HLTrigger.PhaseII.Muon.Customizers.customizerForPhase2MuonHLTVectorHits_L1TkMu import customizePhase2MuonHLTIsolation
+    from HLTrigger.PhaseII.Muon.Customizers.customizerForPhase2MuonHLT_OIFromL1TkMu import customizePhase2MuonHLTIsolation
     process = customizePhase2MuonHLTIsolation(process)
 
     for moduleType in [process.producers_(), process.filters_(), process.analyzers_()]:

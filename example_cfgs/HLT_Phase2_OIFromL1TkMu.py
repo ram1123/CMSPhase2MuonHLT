@@ -1,9 +1,7 @@
 
 import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
-from Configuration.ProcessModifiers.vectorHits_cff import vectorHits
-
-process = cms.Process("MYHLT", eras.Phase2C9, vectorHits)
+process = cms.Process("MYHLT", eras.Phase2C9)
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -72,11 +70,8 @@ process.HLTriggerFinalPath = cms.Path(
 )
 # -- #
 
-# -- Vector Hits -- #
-process.load('RecoLocalTracker.SiPhase2VectorHitBuilder.siPhase2VectorHits_cfi')
-
 # -- HLT paths -- #
-from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPathsVectorHits_L1TkMu_cfi import loadPhase2MuonHLTPaths
+from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_OIFromL1TkMu_cfi import loadPhase2MuonHLTPaths
 process = loadPhase2MuonHLTPaths(process)
 
 process.dump = cms.EDAnalyzer('EventContentAnalyzer')
@@ -88,7 +83,9 @@ from RecoMuon.TrackingTools.MuonServiceProxy_cff import *
 
 process.muonNtuples = cms.EDAnalyzer("MuonNtuples",
                                      MuonServiceProxy,
+                                     #offlineVtx               = cms.InputTag("offlinePrimaryVertices"),
                                      offlineVtx             = cms.InputTag("offlineSlimmedPrimaryVertices"),
+                                     #offlineMuons             = cms.InputTag("muons"),
                                      offlineMuons             = cms.InputTag("slimmedMuons"),
                                      triggerResult            = cms.untracked.InputTag("TriggerResults::MYHLT"),
                                      triggerSummary           = cms.untracked.InputTag("hltTriggerSummaryAOD::MYHLT"),
