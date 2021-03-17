@@ -1139,6 +1139,7 @@ void MuonNtuples::beginEvent()
   event_.L2muons.clear();
   event_.L2muonsTSG.clear();
   event_.L1muons.clear();
+  event_.L1Tkmuons.clear();
   event_.tkmuons.clear();
   event_.hltOImuons.clear();
   event_.hltIOmuons.clear();
