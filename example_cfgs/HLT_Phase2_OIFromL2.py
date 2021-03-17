@@ -65,9 +65,7 @@ from RecoMuon.TrackingTools.MuonServiceProxy_cff import *
 
 process.muonNtuples = cms.EDAnalyzer("MuonNtuples",
                    MuonServiceProxy,
-                   #offlineVtx               = cms.InputTag("offlinePrimaryVertices"),
                    offlineVtx             = cms.InputTag("offlineSlimmedPrimaryVertices"),
-                   #offlineMuons             = cms.InputTag("muons"),
                    offlineMuons             = cms.InputTag("slimmedMuons"),
                    triggerResult            = cms.untracked.InputTag("TriggerResults::MYHLT"),
                    triggerSummary           = cms.untracked.InputTag("hltTriggerSummaryAOD::MYHLT"),
