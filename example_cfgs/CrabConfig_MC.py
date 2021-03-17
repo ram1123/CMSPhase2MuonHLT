@@ -23,7 +23,8 @@ from CRABAPI.RawCommand import crabCommand
 from CRABClient.ClientExceptions import ClientException
 from httplib import HTTPException
 
-tag = "muonHLT_phase2_DYToLL_PU140_default"
+#tag = "muonHLT_phase2_DYToLL_PU140_default"
+tag = "muonHLT_phase2_DYToLL_PU140_1HLMuS"
 
 config.General.workArea   = tag
 config.Data.outLFNDirBase = '/store/user/dkondrat/' + tag

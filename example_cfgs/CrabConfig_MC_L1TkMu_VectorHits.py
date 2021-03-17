@@ -7,7 +7,7 @@ config = config()
 config.JobType.pluginName   = 'Analysis'
 config.JobType.outputFiles  = ['muonNtuple_phase2_MC.root']
 
-config.Data.unitsPerJob     = 1000
+config.Data.unitsPerJob     = 100
 config.Data.totalUnits      = 100000
 
 config.Data.splitting       = 'EventAwareLumiBased'
@@ -24,7 +24,6 @@ from CRABClient.ClientExceptions import ClientException
 from httplib import HTTPException
 
 tag = "muonHLT_phase2_DYToLL_PU140_L1TkMu default_VHenabled"
-#tag = "muonHLT_phase2_DYToLL_PU140_1HLMuS_VHenabled"
 
 config.General.workArea   = tag
 config.Data.outLFNDirBase = '/store/user/dkondrat/' + tag
