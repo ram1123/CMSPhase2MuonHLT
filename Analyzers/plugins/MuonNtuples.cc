@@ -554,7 +554,7 @@ void MuonNtuples::analyze (const edm::Event &event, const edm::EventSetup &event
   } // close if(doOffline)
   
   if(!event.isRealData()) { // for MC GEN-SIM-RAW
-    if(!doOffline){
+    if(!doOffline_){
       //Track Outside-In
       edm::Handle<reco::TrackCollection> trackOI;
       bool trackOIflag = false;
