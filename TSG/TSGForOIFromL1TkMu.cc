@@ -493,8 +493,8 @@ FreeTrajectoryState TSGForOIFromL1TkMu::initialFreeStateL1TTrack(
   
   mat[1][1] = 0.05 * 0.05;  // sigma^2(lambda)
   mat[2][2] = 0.2 * 0.2;    // sigma^2(phi)
-  mat[3][3] = 0.02 * 0.02;    // sigma^2(x_transverse))
-  mat[4][4] = 0.02 * 0.02;    // sigma^2(y_transverse))
+  mat[3][3] = 2. * 2.;    // sigma^2(x_transverse))
+  mat[4][4] = 2. * 2.;    // sigma^2(y_transverse))
 
   CurvilinearTrajectoryError error(mat);
   //std::cout<<"Here is the freestate error matrix: "<<error.matrix()<<std::endl;
