@@ -476,6 +476,7 @@ FreeTrajectoryState TSGForOIFromL1TkMu::initialFreeStateL1TTrack(
   //float tk_z  = tk.POCA().z();
 
   //bool barrel = tk_aeta < 1.1 ? true : false;
+  
   bool barrel = true;
   if(fabs(tk_eta)>1.1 ) barrel = false;
   
@@ -492,9 +493,9 @@ FreeTrajectoryState TSGForOIFromL1TkMu::initialFreeStateL1TTrack(
   
   mat[1][1] = 0.05 * 0.05;  // sigma^2(lambda)
   mat[2][2] = 0.2 * 0.2;    // sigma^2(phi)
-  mat[3][3] = 20. * 20. * 0.01;    // sigma^2(x_transverse))
-  mat[4][4] = 20. * 20. * 0.01;    // sigma^2(y_transverse))
-  
+  mat[3][3] = 0.02 * 0.02;    // sigma^2(x_transverse))
+  mat[4][4] = 0.02 * 0.02;    // sigma^2(y_transverse))
+
   CurvilinearTrajectoryError error(mat);
   //std::cout<<"Here is the freestate error matrix: "<<error.matrix()<<std::endl;
   return FreeTrajectoryState(par, error);
