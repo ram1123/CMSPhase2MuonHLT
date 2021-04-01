@@ -31,7 +31,8 @@
 #include "TrackingTools/GeomPropagators/interface/StateOnTrackerBound.h"
 #include "DataFormats/TrackerCommon/interface/TrackerTopology.h"
 
-#include "DataFormats/TrajectorySeed/interface/SeedCandidate.h"
+#include "DataFormats/L1TCorrelator/interface/TkMuon.h"
+#include "DataFormats/L1TCorrelator/interface/TkMuonFwd.h"
 
 class TSGForOIFromL1TkMu : public edm::global::EDProducer<> {
 public:
@@ -43,6 +44,9 @@ public:
 private:
 
   const edm::EDGetTokenT<l1t::TkMuonCollection> src_;
+
+  /// Minimum Pt of the L1TkMuons to remove soft fakes and as also the L1TkMuon pt resolution is very close to the L3 hence we can apply a cut on pt close to the pt cut we apply on the L3 muons.
+  const double minPtOfL1TKMuons_;
 
   /// Maximum number of seeds for each L1 TkMu
   const unsigned int maxSeeds_;
@@ -106,7 +110,7 @@ private:
                             double errorSF,
                             unsigned int& hitlessSeedsMade,
                             unsigned int& numSeedsMade,
-                            std::vector<TrajectorySeed>& out,  std::vector<SeedCandidate>& outSeedCands, const TTTrack<Ref_Phase2TrackerDigi_>& l2, int l2_idx, const std::string layerId, int layerNum) const;
+                            std::vector<TrajectorySeed>& out) const;
 
   /// Find hits on a given layer (TOB or TEC) and create seeds from updated TSOS with hit
   void makeSeedsFromHits(const GeometricSearchDet& layer,
@@ -118,7 +122,7 @@ private:
                          unsigned int& hitSeedsMade,
                          unsigned int& numSeedsMade,
                          unsigned int& layerCount,
-                         std::vector<TrajectorySeed>& out,  std::vector<SeedCandidate>& outSeedCands, const TTTrack<Ref_Phase2TrackerDigi_>& l2, int l2_idx, const std::string layerId, int layerNum) const;
+                         std::vector<TrajectorySeed>& out) const;
 
   /// Calculate the dynamic error SF by analysing the L1 TkMu
   double calculateSFFromL1TkMu(const TTTrack<Ref_Phase2TrackerDigi_>& track) const;
