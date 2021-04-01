@@ -23,12 +23,12 @@ from CRABAPI.RawCommand import crabCommand
 from CRABClient.ClientExceptions import ClientException
 from httplib import HTTPException
 
-tag = "muonHLT_phase2_DYToLL_PU140_default_VH"
+tag = "muonHLT_phase2_DYToLL_PU140_OIFromL1TkMu_default"
 
 config.General.workArea   = tag
 config.Data.outLFNDirBase = '/store/user/dkondrat/' + tag
 
-config.JobType.psetName    = 'HLT_test_VectorHits.py'
+config.JobType.psetName    = 'HLT_Phase2_OIFromL1TkMu.py'
 config.General.requestName = tag
 config.General.transferLogs = True
 

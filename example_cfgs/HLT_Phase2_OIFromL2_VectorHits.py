@@ -62,7 +62,7 @@ process.HLTriggerFinalPath = cms.Path(
 process.load('RecoLocalTracker.SiPhase2VectorHitBuilder.siPhase2VectorHits_cfi')
 
 # -- HLT paths -- #
-from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPathsVectorHits_cfi import loadPhase2MuonHLTPaths
+from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_OIFromL2_VectorHits_cfi import loadPhase2MuonHLTPaths
 process = loadPhase2MuonHLTPaths(process)
 
 from RecoMuon.TrackingTools.MuonServiceProxy_cff import *
@@ -80,6 +80,7 @@ process.muonNtuples = cms.EDAnalyzer("MuonNtuples",
                    L3CandidatesNoID         = cms.untracked.InputTag("hltPhase2MuonsNoID"),
                    L2Candidates             = cms.untracked.InputTag("hltL2MuonFromL1TkMuonCandidates"),
                    L1Candidates             = cms.untracked.InputTag('hltGtStage2Digis','Muon'),
+                   L1TkCandidates             = cms.untracked.InputTag("L1TkMuons", "", "MYHLT"),
                    TkMuCandidates           = cms.untracked.InputTag("hltPhase2L3OIL3MuonCandidates"),
                    L3OIMuCandidates         = cms.untracked.InputTag("hltPhase2L3OIL3MuonCandidates"),
                    L3IOMuCandidates         = cms.untracked.InputTag("hltPhase2IOFromL2MuonCandidates"),

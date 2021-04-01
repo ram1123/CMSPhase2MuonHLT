@@ -21,10 +21,19 @@ scram b -j 10
 ```
 
 ### Configs
-Located under `HLTrigger/PhaseII/python/Muon/example_cfgs/`
+Located under `HLTrigger/PhaseII/python/Muon/example_cfgs/`. 
+
+The configs contain full Phase2 HLT setup, but you can choose
+whether to create OI seeds from L2 muons or L1TkMuons (skip L2).
+
+VectorHits are enabled for both tracking and seeding in setups with suffix `_VectorHits`.
+
 ```shell
-HLT_test.py # default
-HLT_test_VectorHits.py # hit-based seeds in OI will be created using VectorHits
+# Configs
+HLT_Phase2_OIFromL2.py
+HLT_Phase2_OIFromL2_VectorHits.py
+HLT_Phase2_OIFromL1TkMu.py
+HLT_Phase2_OIFromL1TkMu_VectorHits.py
 ```
 
 

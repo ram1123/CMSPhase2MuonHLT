@@ -7,7 +7,7 @@ config = config()
 config.JobType.pluginName   = 'Analysis'
 config.JobType.outputFiles  = ['muonNtuple_phase2_MC.root']
 
-config.Data.unitsPerJob     = 1000
+config.Data.unitsPerJob     = 100
 config.Data.totalUnits      = 100000
 
 config.Data.splitting       = 'EventAwareLumiBased'
@@ -23,12 +23,12 @@ from CRABAPI.RawCommand import crabCommand
 from CRABClient.ClientExceptions import ClientException
 from httplib import HTTPException
 
-tag = "muonHLT_phase2_DYToLL_PU140_default"
+tag = "muonHLT_phase2_DYToLL_PU140_OIFromL2_default_VHenabled"
 
 config.General.workArea   = tag
 config.Data.outLFNDirBase = '/store/user/dkondrat/' + tag
 
-config.JobType.psetName    = 'HLT_test.py'
+config.JobType.psetName    = 'HLT_Phase2_OIFromL2_VectorHits.py'
 config.General.requestName = tag
 config.General.transferLogs = True
 

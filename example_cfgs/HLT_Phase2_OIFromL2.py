@@ -58,16 +58,14 @@ process.HLTriggerFinalPath = cms.Path(
 # -- #
 
 # -- HLT paths -- #
-from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_cfi import loadPhase2MuonHLTPaths
+from HLTrigger.PhaseII.Muon.Customizers.loadPhase2MuonHLTPaths_OIFromL2_cfi import loadPhase2MuonHLTPaths
 process = loadPhase2MuonHLTPaths(process)
 
 from RecoMuon.TrackingTools.MuonServiceProxy_cff import *
 
 process.muonNtuples = cms.EDAnalyzer("MuonNtuples",
                    MuonServiceProxy,
-                   #offlineVtx               = cms.InputTag("offlinePrimaryVertices"),
                    offlineVtx             = cms.InputTag("offlineSlimmedPrimaryVertices"),
-                   #offlineMuons             = cms.InputTag("muons"),
                    offlineMuons             = cms.InputTag("slimmedMuons"),
                    triggerResult            = cms.untracked.InputTag("TriggerResults::MYHLT"),
                    triggerSummary           = cms.untracked.InputTag("hltTriggerSummaryAOD::MYHLT"),
