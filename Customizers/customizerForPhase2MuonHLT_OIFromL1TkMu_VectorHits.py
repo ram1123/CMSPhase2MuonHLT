@@ -1295,6 +1295,7 @@ def customizeOI(process, processName = "MYHLT"):
         pT3 = cms.double(70.0),
         propagatorName = cms.string('PropagatorWithMaterialParabolicMf'),
         src = cms.InputTag("L1TkMuons", "", processName),
+        minPtOfL1TKMuons = cms.double(23),
         tsosDiff1 = cms.double(0.2),
         tsosDiff2 = cms.double(0.02)
     )

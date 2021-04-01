@@ -45,6 +45,9 @@ private:
 
   const edm::EDGetTokenT<l1t::TkMuonCollection> src_;
 
+  /// Minimum Pt of the L1TkMuons to remove soft fakes and as also the L1TkMuon pt resolution is very close to the L3 hence we can apply a cut on pt close to the pt cut we apply on the L3 muons.
+  const double minPtOfL1TKMuons_;
+
   /// Maximum number of seeds for each L1 TkMu
   const unsigned int maxSeeds_;
 

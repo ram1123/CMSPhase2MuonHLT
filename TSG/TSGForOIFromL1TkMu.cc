@@ -17,7 +17,8 @@
 
 TSGForOIFromL1TkMu::TSGForOIFromL1TkMu(const edm::ParameterSet& iConfig)
   : src_(consumes<l1t::TkMuonCollection>(iConfig.getParameter<edm::InputTag>("src"))),
-      maxSeeds_(iConfig.getParameter<uint32_t>("maxSeeds")),
+    minPtOfL1TKMuons_(iConfig.getParameter<double>("minPtOfL1TKMuons")),
+    maxSeeds_(iConfig.getParameter<uint32_t>("maxSeeds")),
       maxHitlessSeeds_(iConfig.getParameter<uint32_t>("maxHitlessSeeds")),
       maxHitSeeds_(iConfig.getParameter<uint32_t>("maxHitSeeds")),
       numOfLayersToTry_(iConfig.getParameter<int32_t>("layersToTry")),
@@ -129,7 +130,7 @@ void TSGForOIFromL1TkMu::produce(edm::StreamID sid, edm::Event& iEvent, const ed
     auto p3 = l1TkMu_trkPtr->momentum();
 
     LogTrace("TSGForOIFromL1TkMu") << "TSGForOIFromL1TkMu::produce: L1TKMU_TRKPTR muon pT, eta, phi --> " << p3.perp() << " , " << p3.eta() << " , " << p3.phi() << std::endl;
-
+    if(p3.perp()<minPtOfL1TKMuons_) continue;
 
     FreeTrajectoryState fts = initialFreeStateL1TTrack(*l1TkMu_trkPtr, magfieldH.product(), true);
 
@@ -506,6 +507,7 @@ FreeTrajectoryState TSGForOIFromL1TkMu::initialFreeStateL1TTrack(
 void TSGForOIFromL1TkMu::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   edm::ParameterSetDescription desc;
   desc.add<edm::InputTag>("src", edm::InputTag("hltL2Muons", "UpdatedAtVtx"));
+  desc.add<double>("minPtOfL1TKMuons", 23.0);
   desc.add<int>("layersToTry", 2);
   desc.add<double>("fixedErrorRescaleFactorForHitless", 2.0);
   desc.add<int>("hitsToTry", 1);
