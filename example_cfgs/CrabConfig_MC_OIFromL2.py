@@ -7,7 +7,7 @@ config = config()
 config.JobType.pluginName   = 'Analysis'
 config.JobType.outputFiles  = ['muonNtuple_phase2_MC.root']
 
-config.Data.unitsPerJob     = 1000
+config.Data.unitsPerJob     = 100
 config.Data.totalUnits      = 100000
 
 config.Data.splitting       = 'EventAwareLumiBased'
