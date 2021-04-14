@@ -17,13 +17,13 @@ config.Data.useParent       = True #!!!!
 
 config.Site.storageSite     = 'T2_US_Purdue'
 config.JobType.numCores     = 1
-config.JobType.maxMemoryMB  = 2500
+config.JobType.maxMemoryMB  = 5000
 config.JobType.allowUndistributedCMSSW = True
 from CRABAPI.RawCommand import crabCommand
 from CRABClient.ClientExceptions import ClientException
 from httplib import HTTPException
 
-tag = "muonHLT_phase2_DYToLL_PU140_OIFromL1TkMu_default"
+tag = "muonHLT_phase2_DYToLL_PU200_OIFromL1TkMu_default"
 
 config.General.workArea   = tag
 config.Data.outLFNDirBase = '/store/user/dkondrat/' + tag
@@ -38,10 +38,10 @@ config.General.transferLogs = True
 #config.Data.inputDataset = config.Data.inputDataset = '/DYToLL_M-50_TuneCP5_14TeV-pythia8/PhaseIITDRSpring19DR-NoPU_pilot_106X_upgrade2023_realistic_v3-v2/GEN-SIM-DIGI-RAW'
 # PU 140
 #config.Data.inputDataset = '/DYToLL_M-50_TuneCP5_14TeV-pythia8/Phase2HLTTDRWinter20RECOMiniAOD-PU140_pilot_110X_mcRun4_realistic_v3-v2/MINIAODSIM'
-config.Data.inputDataset = '/DYToLL_M-50_TuneCP5_14TeV-pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU140_pilot_111X_mcRun4_realistic_T15_v1-v1/FEVT'
+#config.Data.inputDataset = '/DYToLL_M-50_TuneCP5_14TeV-pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU140_pilot_111X_mcRun4_realistic_T15_v1-v1/FEVT'
 # PU 200
 #config.Data.inputDataset = '/DYToLL_M-50_TuneCP5_14TeV-pythia8/Phase2HLTTDRWinter20RECOMiniAOD-PU200_pilot_110X_mcRun4_realistic_v3-v2/MINIAODSIM'
-
+config.Data.inputDataset = '/DYToLL_M-50_TuneCP5_14TeV-pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_pilot_111X_mcRun4_realistic_T15_v1-v1/FEVT'
 
 
 #config.Data.inputDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSReader'
