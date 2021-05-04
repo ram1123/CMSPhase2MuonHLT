@@ -1,7 +1,7 @@
 /**
   \class    TSGForOIFromL1TkMu
   \brief    Create L3MuonTrajectorySeeds from L1 Tracker Muons in an outside-in manner
-  \author   Arnab Purohit (Purdue University, West Lafayette, USA)
+  \author   Arnab Purohit, Dmitry Kondratyev (Purdue University, West Lafayette, USA)
  */
 
 #include "RecoMuon/TrackerSeedGenerator/plugins/TSGForOIFromL1TkMu.h"
