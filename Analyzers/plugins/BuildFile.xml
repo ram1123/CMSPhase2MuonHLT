@@ -9,16 +9,13 @@
 <use name="CommonTools/UtilAlgos"/>
 <use name="PhysicsTools/PatAlgos"/>
 <use name="CommonTools/CandUtils"/>
-<use name="rootcintex"/>
+
 <use name="AnalysisDataFormats/TopObjects"/>
 <use name="RecoEgamma/EgammaTools"/>
-<use name="RecoMuon/TrackingTools"/>
-<use name="MagneticField/Engine"/>
-<use name="MagneticField/Records"/>
 <use name="L1Trigger/L1TMuon"/>
+<use name="HLTrigger/Analyzers"/>
 
 <library name="HLTriggerAnalyzersPlugin" file="*.cc">
-   <use name="HLTrigger/Analyzers"/>
    <use name="root"/>
    <use name="rootminuit"/>
    <use name="clhep"/>
@@ -26,7 +23,7 @@
    <use name="rootmath"/>
    <use name="RecoMuon/TrackingTools"/>
    <use name="TrackingTools/Records"/>
-   <Flags EDM_PLUGIN="1"/>
+   <flags EDM_PLUGIN="1"/>
 </library>
 
 <use name="TrackingTools/TrajectoryState"/>

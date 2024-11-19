@@ -1,7 +1,7 @@
 /** \class MuonNtuples
  */
-      
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"      
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
@@ -9,6 +9,8 @@
 #include "FWCore/Common/interface/TriggerResultsByName.h"
 #include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/Framework/interface/ESHandle.h"
+
+#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/Common/interface/View.h"
@@ -40,7 +42,7 @@
 #include <string>
 #include <iomanip>
 #include "TTree.h"
-#include "HLTrigger/Analyzers/src/MuonTree.h"
+#include "HLTrigger/Analyzers/interface/MuonTree.h"
 #include "DataFormats/MuonReco/interface/MuonTrackLinks.h"
 #include "DataFormats/TrackerRecHit2D/interface/BaseTrackerRecHit.h"
 #include "DataFormats/TrackingRecHit/interface/TrackingRecHit.h"
@@ -61,7 +63,9 @@
 #include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
 #include "Geometry/Records/interface/GlobalTrackingGeometryRecord.h"
 #include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
-#include "DataFormats/L1TCorrelator/interface/TkMuon.h"
+
+#include "DataFormats/L1TMuonPhase2/interface/TrackerMuon.h"
+//#include "DataFormats/L1TCorrelator/interface/TkMuon.h"
 #include "DataFormats/L1TCorrelator/interface/TkMuonFwd.h"
 #include "L1Trigger/L1TMuon/interface/MicroGMTConfiguration.h"
 
@@ -91,7 +95,8 @@ const double NOMATCHITS =  0.;
 
 
 
-class MuonNtuples : public edm::EDAnalyzer {
+class MuonNtuples : public edm::one::EDAnalyzer<>{
+//class MuonNtuples : public edm::EDAnalyzer {
   
 public:
   MuonNtuples(const edm::ParameterSet& cfg);
@@ -137,8 +142,10 @@ private:
                     HLTCollectionType type,
                     const edm::EventSetup &
 		    );
-  
+
+  //Aman
   void fillHltMuons(const edm::Handle<reco::MuonCollection> &,
+  //void fillHltMuons(const edm::Handle<pat::MuonCollection> &,
                     const edm::Event   &,
 		    HLTCollectionType type
 		    );
@@ -146,7 +153,9 @@ private:
   void fillL1Muons(const edm::Handle<l1t::MuonBxCollection> &,
 		   const edm::Event   &
                    );
-  void fillL1TkMuons(const edm::Handle<l1t::TkMuonCollection> &,
+  //void fillL1TkMuons(const edm::Handle<l1t::TrackerMuonCollection> &,
+  //void fillL1TkMuons(const edm::Handle<l1t::TkMuonCollection> &,
+  void fillL1TkMuons(const edm::Handle<l1t::TrackerMuonCollection> &,
 		     const edm::Event   &
 		     );
   
@@ -191,13 +200,18 @@ private:
   edm::InputTag l3candTag_;
   edm::EDGetTokenT<reco::RecoChargedCandidateCollection> l3candToken_;
   edm::InputTag l3candNoIDTag_;
+  //Aman
+  //edm::EDGetTokenT<std::vector<pat::Muon>> l3candNoIDToken_; 
+
+  //Aman
   edm::EDGetTokenT<std::vector<reco::Muon>> l3candNoIDToken_; 
   edm::InputTag l2candTag_;
   edm::EDGetTokenT<reco::RecoChargedCandidateCollection> l2candToken_; 
   edm::InputTag l1candTag_;
   edm::EDGetTokenT<l1t::MuonBxCollection> l1candToken_; 
   edm::InputTag l1tkcandTag_;
-  edm::EDGetTokenT<l1t::TkMuonCollection> l1tkcandToken_; 
+  edm::EDGetTokenT<l1t::TrackerMuonCollection> l1tkcandToken_; 
+  //edm::EDGetTokenT<l1t::TkMuonCollection> l1tkcandToken_; 
   edm::InputTag tkMucandTag_;
   edm::EDGetTokenT<reco::RecoChargedCandidateCollection> tkMucandToken_; 
   edm::InputTag l3OIcandTag_;
@@ -207,7 +221,13 @@ private:
   
   edm::EDGetTokenT<reco::MuonTrackLinksCollection>  theLinksToken_;
   edm::EDGetTokenT<reco::TrackExtraCollection>  theMuonsWithHitsToken_;
-  
+ 
+  //Geometry 
+  const edm::ESGetToken<MagneticField, IdealMagneticFieldRecord> magFieldToken_;
+  const edm::ESGetToken<Propagator, TrackingComponentsRecord> t_propagatorOppositeH_;
+  const edm::ESGetToken<Propagator, TrackingComponentsRecord> t_propagatorAlongH_;
+  const edm::ESGetToken<GlobalTrackingGeometry, GlobalTrackingGeometryRecord> t_geometryH_;
+  const edm::ESGetToken<Propagator, TrackingComponentsRecord> t_SHPOpposite_; 
   
   
   //trigger process
@@ -280,13 +300,18 @@ MuonNtuples::MuonNtuples(const edm::ParameterSet& cfg):
   l3candTag_              (cfg.getUntrackedParameter<edm::InputTag>("L3Candidates")),
   l3candToken_            (consumes<reco::RecoChargedCandidateCollection>(l3candTag_)),
   l3candNoIDTag_              (cfg.getUntrackedParameter<edm::InputTag>("L3CandidatesNoID")),
+
+//Aman
   l3candNoIDToken_            (consumes<std::vector<reco::Muon>>(l3candNoIDTag_)),
+//  l3candNoIDToken_            (consumes<std::vector<pat::Muon>>(l3candNoIDTag_)),
+
   l2candTag_              (cfg.getUntrackedParameter<edm::InputTag>("L2Candidates")),
   l2candToken_            (consumes<reco::RecoChargedCandidateCollection>(l2candTag_)),
   l1candTag_              (cfg.getUntrackedParameter<edm::InputTag>("L1Candidates")),
   l1candToken_            (consumes<l1t::MuonBxCollection>(l1candTag_)),
   l1tkcandTag_              (cfg.getUntrackedParameter<edm::InputTag>("L1TkCandidates")),
-  l1tkcandToken_            (consumes<l1t::TkMuonCollection>(l1tkcandTag_)),
+  l1tkcandToken_            (consumes<l1t::TrackerMuonCollection>(l1tkcandTag_)),
+  //l1tkcandToken_            (consumes<l1t::TkMuonCollection>(l1tkcandTag_)),
   tkMucandTag_            (cfg.getUntrackedParameter<edm::InputTag>("TkMuCandidates")),
   tkMucandToken_          (consumes<reco::RecoChargedCandidateCollection>(tkMucandTag_)),
   l3OIcandTag_            (cfg.getUntrackedParameter<edm::InputTag>("L3OIMuCandidates")),
@@ -297,7 +322,12 @@ MuonNtuples::MuonNtuples(const edm::ParameterSet& cfg):
   theLinksToken_          (consumes<reco::MuonTrackLinksCollection>(cfg.getUntrackedParameter<edm::InputTag>("MuonLinksTag"))),
   theMuonsWithHitsToken_  (consumes<reco::TrackExtraCollection>(edm::InputTag("globalMuons"))),
   
-  
+  magFieldToken_(esConsumes()), 
+  t_propagatorOppositeH_(esConsumes(edm::ESInputTag("", cfg.getParameter<std::string>("propagatorName")))),
+  t_propagatorAlongH_(esConsumes(edm::ESInputTag("", cfg.getParameter<std::string>("propagatorName")))),
+  t_geometryH_(esConsumes()),
+  t_SHPOpposite_(esConsumes(edm::ESInputTag("", "hltESPSteppingHelixPropagatorOpposite"))),
+
   lumiScalerTag_          (cfg.getUntrackedParameter<edm::InputTag>("lumiScalerTag")),
   lumiScalerToken_        (consumes<LumiScalersCollection>(lumiScalerTag_)), 
   puTag_                  (cfg.getUntrackedParameter<edm::InputTag>("puInfoTag")),
@@ -463,6 +493,8 @@ void MuonNtuples::analyze (const edm::Event &event, const edm::EventSetup &event
       fillHltMuons(l3cands, event, HLTCollectionType::iL3muons, eventSetup);
     
     // Handle the 2nd online muon collection and fill online muons //the hltmuons branch
+    //Aman
+    //edm::Handle<pat::MuonCollection> l3candsNoID;
     edm::Handle<reco::MuonCollection> l3candsNoID;
     if (event.getByToken(l3candNoIDToken_, l3candsNoID))
       fillHltMuons(l3candsNoID, event, HLTCollectionType::iL3NoIDmuons);
@@ -482,7 +514,8 @@ void MuonNtuples::analyze (const edm::Event &event, const edm::EventSetup &event
     if (event.getByToken(l1candToken_, l1cands))
       fillL1Muons(l1cands, event);
     
-    edm::Handle<l1t::TkMuonCollection> l1tkcands;
+    edm::Handle<l1t::TrackerMuonCollection> l1tkcands;
+    //edm::Handle<l1t::TkMuonCollection> l1tkcands;
     if (event.getByToken(l1tkcandToken_, l1tkcands))
       fillL1TkMuons(l1tkcands, event);
     
@@ -534,6 +567,9 @@ void MuonNtuples::analyze (const edm::Event &event, const edm::EventSetup &event
     
     //reco::TrackExtraCollection trackerMuons;
     //for(auto const& tkmu : *trackMuons) trackerMuons.push_back(tkmu);
+
+
+    //std::cout<<" ======test1===== "<<std::endl;
     
     size_t L3MuonFilterIndex = (*triggerSummary).filterIndex(edm::InputTag("Mu","","TEST"));//(edm::InputTag( "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q","","TEST"));
     
@@ -808,7 +844,9 @@ void MuonNtuples::fillMuons(const edm::Handle<pat::MuonCollection>       & muons
   //for(std::vector<reco::Muon>::const_iterator mu1=muons->begin(); mu1!=muons->end(); ++mu1) // for AODSIM
   for(std::vector<pat::Muon>::const_iterator mu1=muons->begin(); mu1!=muons->end(); ++mu1)
     { 
-      
+
+            
+      //std::cout<<" ======test2===== "<<std::endl;
       n_mu++;
       MuonCand theMu;
       
@@ -826,7 +864,18 @@ void MuonNtuples::fillMuons(const edm::Handle<pat::MuonCollection>       & muons
       muon::isMediumMuon( (*mu1)     ) ? theMu.isMedium = 1 : theMu.isMedium = 0;
       
       
-      
+      theMu.simFlavour               = mu1->simFlavour(); 
+      theMu.simHeaviestMotherFlavour = mu1->simHeaviestMotherFlavour(); 
+      theMu.simPdgId                 = mu1->simPdgId(); 
+      theMu.simMotherPdgId           = mu1->simMotherPdgId(); 
+      theMu.simBX                    = mu1->simBX(); 
+      theMu.simTpEvent               = mu1->simTpEvent(); 
+      theMu.simProdRho               = mu1->simProdRho(); 
+      theMu.simProdZ                 = mu1->simProdZ(); 
+      theMu.simPt                    = mu1->simPt(); 
+      theMu.simEta                   = mu1->simEta(); 
+      theMu.simPhi                   = mu1->simPhi(); 
+      theMu.isSimType                = mu1->simType(); 
       //New variables in the Ntuple 
       
       if (mu1 -> globalTrack().isNonnull()){
@@ -921,6 +970,11 @@ void MuonNtuples::fillHltMuons(const edm::Handle<reco::RecoChargedCandidateColle
   
   for( unsigned int il3 = 0; il3 < l3cands->size(); ++il3) {
     HLTMuonCand theL3Mu;
+
+
+    //std::cout<<" ======test3===== "<<std::endl;
+   
+
     reco::RecoChargedCandidateRef candref(l3cands, il3);
     reco::TrackRef candTrackRef = candref->track();
     theL3Mu.pt      = candref -> pt();
@@ -928,45 +982,66 @@ void MuonNtuples::fillHltMuons(const edm::Handle<reco::RecoChargedCandidateColle
     theL3Mu.phi     = candref -> phi();
     theL3Mu.charge  = candref -> charge();
     
+    
+    //std::cout<<" ======test3.1===== "<<std::endl;
     reco::TrackRef trkmu = candref->track();
+
     theL3Mu.trkpt   = trkmu -> pt();
+
+
+
+
+
+
+    //theL3Mu.trkpt   = candref -> pt();
+
+    //std::cout<<" ======test3.2===== "<<std::endl;
+
     if (type == HLTCollectionType::iL2muons){
       if (trkmu -> ndof() != 0){ 
 	theL3Mu.chi2 = trkmu -> chi2() / trkmu -> ndof();
+
       } else {
 	theL3Mu.chi2 = -1;
       }
       theL3Mu.validHits = trkmu -> found();
       theL3Mu.lostHits = trkmu -> lost();
-      
+
+ 
+      //std::cout<<" ======test3.3===== "<<std::endl;
       Plane::PlanePointer dummyPlane = Plane::build(Plane::PositionType(), Plane::RotationType());        
-      edm::ESHandle<MagneticField> magfieldH;
-      edm::ESHandle<Propagator> propagatorAlongH;
-      edm::ESHandle<Propagator> propagatorOppositeH; 
-      edm::ESHandle<GlobalTrackingGeometry> geometryH;
+
+
+      //std::cout<<" ======test4===== "<<std::endl;
+      const MagneticField& magfieldH = iSetup.getData(magFieldToken_);
+      const Propagator& propagatorAlongH    = iSetup.getData(t_propagatorAlongH_);
+      const Propagator& propagatorOppositeH = iSetup.getData(t_propagatorOppositeH_);
+      const GlobalTrackingGeometry& geometryH = iSetup.getData(t_geometryH_);
       
-      iSetup.get<IdealMagneticFieldRecord>().get(magfieldH);
-      iSetup.get<TrackingComponentsRecord>().get(propagatorName_, propagatorOppositeH);
-      iSetup.get<TrackingComponentsRecord>().get(propagatorName_, propagatorAlongH);
-      iSetup.get<GlobalTrackingGeometryRecord>().get(geometryH);
+      edm::ESHandle<Propagator> SHPOpposite = iSetup.getHandle(t_SHPOpposite_);
       
-      std::unique_ptr<Propagator> propagatorAlong = SetPropagationDirection(*propagatorAlongH, alongMomentum);
-      std::unique_ptr<Propagator> propagatorOpposite = SetPropagationDirection(*propagatorOppositeH, oppositeToMomentum);
-      edm::ESHandle<Propagator> SHPOpposite;
-      iSetup.get<TrackingComponentsRecord>().get("hltESPSteppingHelixPropagatorOpposite", SHPOpposite);
+      std::unique_ptr<Propagator> propagatorAlong = SetPropagationDirection(propagatorAlongH, alongMomentum);
+      std::unique_ptr<Propagator> propagatorOpposite = SetPropagationDirection(propagatorOppositeH, oppositeToMomentum);
+
+      //std::cout<<" ======test4.1===== "<<std::endl;
+
+      FreeTrajectoryState fts = trajectoryStateTransform::initialFreeState(*candTrackRef, &magfieldH);
       
-      FreeTrajectoryState fts = trajectoryStateTransform::initialFreeState(*candTrackRef, magfieldH.product());
-      
+      //std::cout<<" ======test4.2===== "<<std::endl;
+
       dummyPlane->move(fts.position() - dummyPlane->position());
       TrajectoryStateOnSurface tsosAtIP = TrajectoryStateOnSurface(fts, *dummyPlane);
-      TrajectoryStateOnSurface tsosAtMuonSystem = trajectoryStateTransform::innerStateOnSurface(
-												*candTrackRef, *geometryH, magfieldH.product());
-      trajectoryStateTransform::innerStateOnSurface(*candTrackRef, *geometryH, magfieldH.product());
+      TrajectoryStateOnSurface tsosAtMuonSystem = trajectoryStateTransform::innerStateOnSurface(*candTrackRef, geometryH, &magfieldH);
+
+      //std::cout<<" ======test4.3===== "<<std::endl;
+  
+      trajectoryStateTransform::innerStateOnSurface(*candTrackRef, geometryH, &magfieldH);
       StateOnTrackerBound fromInside(propagatorAlong.get());
       TrajectoryStateOnSurface outerTkStateInside = fromInside(fts);
       StateOnTrackerBound fromOutside(&*SHPOpposite);
       TrajectoryStateOnSurface outerTkStateOutside = fromOutside(tsosAtMuonSystem);
       
+      //std::cout<<" ======test5===== "<<std::endl;
       if (tsosAtIP.isValid()){
 	theL3Mu.tsos_IP_valid = 1;
 	AlgebraicSymMatrix55 matrix_IP = tsosAtIP.curvilinearError().matrix();
@@ -1010,15 +1085,24 @@ void MuonNtuples::fillHltMuons(const edm::Handle<reco::RecoChargedCandidateColle
   }
 }
 
+//Aman
+//void MuonNtuples::fillHltMuons(const edm::Handle<pat::MuonCollection> & l3cands , //candidates to HLT 
 void MuonNtuples::fillHltMuons(const edm::Handle<reco::MuonCollection> & l3cands , //candidates to HLT 
                                const edm::Event                                        & event   , 
                                HLTCollectionType type
                                )
 {
+
+
+      //std::cout<<" ======test6===== "<<std::endl;
+  //for(std::vector<pat::Muon>::const_iterator mu1=l3cands->begin(); mu1!=l3cands->end(); ++mu1) 
+
+  //Aman
   for(std::vector<reco::Muon>::const_iterator mu1=l3cands->begin(); mu1!=l3cands->end(); ++mu1) 
     {
       
-      
+       
+      //std::cout<<" ======test7===== "<<std::endl;
       
       HLTMuonCand theL3Mu;
       
@@ -1062,10 +1146,15 @@ void MuonNtuples::fillL1Muons(const edm::Handle<l1t::MuonBxCollection> & l1cands
 
 
 // ---------------------------------------------------------------------
-void MuonNtuples::fillL1TkMuons(const edm::Handle<l1t::TkMuonCollection> & l1tkcands ,
+//void MuonNtuples::fillL1TkMuons(const edm::Handle<l1t::TrackerMuonCollection> & l1tkcands ,
+//void MuonNtuples::fillL1TkMuons(const edm::Handle<l1t::TkMuonCollection> & l1tkcands ,
+
+
+void MuonNtuples::fillL1TkMuons(const edm::Handle<l1t::TrackerMuonCollection> & l1tkcands ,
 				const edm::Event                         & event    
 				)
 {
+  //std::cout<<"I am in L1TkMuons "<<std::endl;
   
   for (auto ittkmu = l1tkcands->begin(); ittkmu != l1tkcands->end(); ittkmu++) {
     //l1t::MuonRef muon(l1cands, distance(l1cands->begin(l1cands->getFirstBX()),it) );
@@ -1087,23 +1176,40 @@ void MuonNtuples::fillL1TkMuons(const edm::Handle<l1t::TkMuonCollection> & l1tkc
     theL1TkMu.phi      = p3.phi();
     theL1TkMu.charge   = it->rInv()>0? 1.: -1.;
     theL1TkMu.quality  = 0;
-    if (ittkmu->muonDetector() != 3) {
-      theL1TkMu.pt_muref       = ittkmu->muRef()->hwPt() * 0.5;
-      theL1TkMu.eta_muref      = ittkmu->muRef()->hwEta() * 0.010875;
-      theL1TkMu.phi_muref      = l1t::MicroGMTConfiguration::calcGlobalPhi(ittkmu->muRef()->hwPhi(), ittkmu->muRef()->trackFinderType(), ittkmu->muRef()->processor()) * 2 * M_PI / 576;
-      theL1TkMu.charge_muref   = std::pow(-1, ittkmu->muRef()->hwSign());
-      theL1TkMu.quality_muref  = ittkmu->quality();      
-      theL1TkMu.NMatchedTracks_muref = ittkmu->nTracksMatched();
-    }
-    else {
-      theL1TkMu.pt_muref       = ittkmu->emtfTrk()->Pt();
-      theL1TkMu.eta_muref      = ittkmu->emtfTrk()->Eta();
-      theL1TkMu.phi_muref      = angle_units::operators::convertDegToRad(ittkmu->emtfTrk()->Phi_glob());
-      theL1TkMu.charge_muref   = ittkmu->emtfTrk()->Charge();
-      theL1TkMu.quality_muref  = ittkmu->quality();      
-      theL1TkMu.NMatchedTracks_muref = ittkmu->nTracksMatched();
-    }
-    theL1TkMu.MuonRegion = ittkmu->muonDetector();
+
+
+//    if (ittkmu->muonDetector() != 3) {
+//      theL1TkMu.pt_muref       = ittkmu->muRef()->hwPt() * 0.5;
+//      theL1TkMu.eta_muref      = ittkmu->muRef()->hwEta() * 0.010875;
+//      theL1TkMu.phi_muref      = l1t::MicroGMTConfiguration::calcGlobalPhi(ittkmu->muRef()->hwPhi(), ittkmu->muRef()->trackFinderType(), ittkmu->muRef()->processor()) * 2 * M_PI / 576;
+//      theL1TkMu.charge_muref   = std::pow(-1, ittkmu->muRef()->hwSign());
+//      theL1TkMu.quality_muref  = ittkmu->quality();      
+//      theL1TkMu.NMatchedTracks_muref = ittkmu->nTracksMatched();
+//    }
+//    else {
+//      theL1TkMu.pt_muref       = ittkmu->emtfTrk()->Pt();
+//      theL1TkMu.eta_muref      = ittkmu->emtfTrk()->Eta();
+//      theL1TkMu.phi_muref      = angle_units::operators::convertDegToRad(ittkmu->emtfTrk()->Phi_glob());
+//      theL1TkMu.charge_muref   = ittkmu->emtfTrk()->Charge();
+//      theL1TkMu.quality_muref  = ittkmu->quality();      
+//      theL1TkMu.NMatchedTracks_muref = ittkmu->nTracksMatched();
+//    }
+  
+    theL1TkMu.pt_muref       = ittkmu->hwPt();
+    theL1TkMu.eta_muref      = ittkmu->hwEta();
+    theL1TkMu.phi_muref      = ittkmu->hwPhi();
+    theL1TkMu.charge_muref   = ittkmu->hwCharge();
+    theL1TkMu.quality_muref  = ittkmu->hwQual();
+
+    theL1TkMu.z0_muref  = ittkmu->hwZ0();
+    theL1TkMu.d0_muref  = ittkmu->hwD0();
+    theL1TkMu.iso_muref  = ittkmu->hwIso();
+    theL1TkMu.beta_muref  = ittkmu->hwBeta();
+    //theL1TkMu.NMatchedTracks_muref = ittkmu->nTracksMatched();
+
+    //std::cout<<"L1TkMuon pt "<< ittkmu->hwPt()<<std::endl;
+
+    //theL1TkMu.MuonRegion = ittkmu->muonDetector();
     
     event_.L1Tkmuons.push_back(theL1TkMu);
   }

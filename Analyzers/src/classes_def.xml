@@ -1,0 +1,11 @@
+<lcgdict>
+  <class name="MuonEvent"/>
+  <class name="GenParticleCand"/>
+  <class name="HltTrackCand"/>
+  <class name="MuonCand"/>
+  <class name="HLTMuonCand"/>
+  <class name="L1MuonCand"/>
+  <class name="L1TkMuonCand"/>
+  <class name="HLTObjCand"/>
+  <class name="HLTInfo"/>
+</lcgdict>
