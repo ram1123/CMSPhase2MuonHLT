@@ -33,6 +33,7 @@
 
 #include "DataFormats/L1TCorrelator/interface/TkMuon.h"
 #include "DataFormats/L1TCorrelator/interface/TkMuonFwd.h"
+#include "DataFormats/L1TMuonPhase2/interface/TrackerMuon.h"
 
 class TSGForOIFromL1TkMu : public edm::global::EDProducer<> {
 public:
@@ -43,7 +44,8 @@ public:
 
 private:
 
-  const edm::EDGetTokenT<l1t::TkMuonCollection> src_;
+  const edm::EDGetTokenT<l1t::TrackerMuonCollection> src_;
+//const edm::EDGetTokenT<l1t::TkMuonCollection> src_;
 
   /// Minimum Pt of the L1TkMuons to remove soft fakes and as also the L1TkMuon pt resolution is very close to the L3 hence we can apply a cut on pt close to the pt cut we apply on the L3 muons.
   const double minPtOfL1TKMuons_;
@@ -102,11 +104,24 @@ private:
   const std::string propagatorName_;
   const std::string theCategory_;
 
+
+  const edm::ESGetToken<Chi2MeasurementEstimatorBase, TrackingComponentsRecord> estimatorToken_;
+  const edm::ESGetToken<MagneticField, IdealMagneticFieldRecord> magfieldToken_;
+  const edm::ESGetToken<Propagator, TrackingComponentsRecord> propagatorToken_;
+  const edm::ESGetToken<TrackerGeometry, TrackerDigiGeometryRecord> tmpTkGeometryToken_;
+  const edm::ESGetToken<GlobalTrackingGeometry, GlobalTrackingGeometryRecord> geometryToken_;
+  const edm::ESGetToken<Propagator, TrackingComponentsRecord> sHPOppositeToken_;
+
+
+
+
+
+
   /// Create seeds without hits on a given layer (TOB or TEC)
   void makeSeedsWithoutHits(const GeometricSearchDet& layer,
                             const TrajectoryStateOnSurface& tsos,
                             const Propagator& propagatorAlong,
-                            edm::ESHandle<Chi2MeasurementEstimatorBase>& estimator,
+                            const edm::ESHandle<Chi2MeasurementEstimatorBase>& estimator,
                             double errorSF,
                             unsigned int& hitlessSeedsMade,
                             unsigned int& numSeedsMade,
@@ -116,8 +131,8 @@ private:
   void makeSeedsFromHits(const GeometricSearchDet& layer,
                          const TrajectoryStateOnSurface& tsos,
                          const Propagator& propagatorAlong,
-                         edm::ESHandle<Chi2MeasurementEstimatorBase>& estimator,
-                         edm::Handle<MeasurementTrackerEvent>& measurementTracker,
+                         const edm::ESHandle<Chi2MeasurementEstimatorBase>& estimator,
+                         const edm::Handle<MeasurementTrackerEvent>& measurementTracker,
                          double errorSF,
                          unsigned int& hitSeedsMade,
                          unsigned int& numSeedsMade,
