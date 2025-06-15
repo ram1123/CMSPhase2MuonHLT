@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 def loadPhase2MuonHLTPaths(process, processName = "MYHLT"):
     # N.B. this customizer overwrites previously defined filters and paths
 
-    print """
+    print("""
 ########################################################
 Imported muon paths:
     - L1_SingleTkMuon_22
@@ -23,7 +23,7 @@ L1TkMuon scalings (ScalingsV11p1.txt):
         endcap=cms.vdouble(0.864715, 1.03215, 0.0),
     )
 ########################################################
-"""
+""")
 
     # -- L1TkMuon scalings and allowed qualities
     L1TkMuonScalings = cms.PSet(
@@ -40,7 +40,7 @@ L1TkMuon scalings (ScalingsV11p1.txt):
     process = customizePhase2MuonHLTIsolation(process)
 
     for moduleType in [process.producers_(), process.filters_(), process.analyzers_()]:
-        for name, module in moduleType.iteritems():
+        for name, module in moduleType.items():
             if hasattr(module, "mightGet") and module.mightGet:
                 module.mightGet = cms.optional.untracked.vstring
 

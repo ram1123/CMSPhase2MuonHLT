@@ -1,4 +1,5 @@
 import FWCore.ParameterSet.Config as cms
+from functools import reduce
 
 def loadPhase2MuonHLTPSets(process, processName = "MYHLT"):
 
@@ -4012,7 +4013,7 @@ def customizePhase2MuonHLTHcalIsolation(process, processName = "MYHLT"):
 
 def customizePhase2MuonHLTHgcalPFIsolation(process, processName = "MYHLT"):
 
-    print "not using anymore"
+    print("not using anymore")
     import sys
     sys.exit(1)
 
