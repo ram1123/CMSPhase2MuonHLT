@@ -1,16 +1,3 @@
-# from: [Configuration/Geometry/README.md](https://github.com/cms-sw/cmssw/blob/master/Configuration/Geometry/README.md)
-
-- T32: Phase2 tilted tracker. The tracker description is identical to T25. The outer radius of the tracker volume is reduced to avoid a clash with the BTL geometry (same as T31). The positions of the tracker components are not affected. This geometry is intended as a transition step towards a realistic configuration with 3D sensors in TBPX layer1.
-- T33: Phase2 tilted tracker. Identical to T32 apart from a more realistic description of the 3D sensors in TBPX layer1.
-- Module where these geometries are defined: [Configuration/AlCa/python/autoCondPhase2.py](https://github.com/cms-sw/cmssw/blob/CMSSW_14_0_9_patchX/Configuration/AlCa/python/autoCondPhase2.py)
-
-# ERA
-
-```python
-from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
-```
-
-
 # cmsDriverCommand
 
 ```bash
